@@ -1,5 +1,17 @@
 # zgit
 
+                      ░██   ░██    
+                            ░██    
+░█████████  ░████████ ░██░████████ 
+     ░███  ░██    ░██ ░██   ░██    
+   ░███    ░██    ░██ ░██   ░██    
+ ░███      ░██   ░███ ░██   ░██    
+░█████████  ░█████░██ ░██    ░████ 
+                  ░██              
+            ░███████               
+                                   
+
+
 A beautifully colored git alternative with box-style terminal output.
 
 ## Install
