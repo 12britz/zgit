@@ -34,7 +34,6 @@ export function box(title, lines = [], options = {}) {
   const titleLen = title ? ansiLen(title) : 0;
   const contentWidth = Math.max(0, titleLen, ...plainLines);
   const inner = contentWidth + pad * 2;
-  const width = inner + 2;
 
   const top = color + "┌" + "─".repeat(inner) + "┐" + colors.reset;
   const divider = color + "├" + "─".repeat(inner) + "┤" + colors.reset;
@@ -46,12 +45,14 @@ export function box(title, lines = [], options = {}) {
     return `${color}│${colors.reset} ${content}${" ".repeat(Math.max(0, space))} ${color}│${colors.reset}`;
   };
 
-  const header =
+  const headerLine =
     title || title === ""
-      ? row(`${color}${colors.bold} ${title} ${colors.reset}`)
+      ? `${color}${colors.bold} ${title}${colors.reset}`
       : null;
 
-  const renderedHeader = header ? [header] : [];
+  const renderedHeader = headerLine
+    ? [row(headerLine)]
+    : [];
 
   const body = lines.map((line) => {
     const text = typeof line === "string" ? line : line.text ?? "";
@@ -60,7 +61,7 @@ export function box(title, lines = [], options = {}) {
     return row(out);
   });
 
-  const out = [top, header, divider, ...body, bot];
+  const out = [top, ...renderedHeader, divider, ...body, bot];
   return out.join("\n");
 }
 
