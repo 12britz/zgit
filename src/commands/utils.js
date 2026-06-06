@@ -92,3 +92,7 @@ export function error(text) {
 export function info(text) {
   return `${colors.cyan}ℹ${colors.reset} ${text}`;
 }
+
+export function warn(text) {
+  return `${colors.yellow}⚠${colors.reset} ${text}`;
+}
