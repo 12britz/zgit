@@ -48,8 +48,10 @@ export function box(title, lines = [], options = {}) {
 
   const header =
     title || title === ""
-      ? row(`${color}${colors.bold} ${title}${colors.reset}`)
+      ? row(`${color}${colors.bold} ${title} ${colors.reset}`)
       : null;
+
+  const renderedHeader = header ? [header] : [];
 
   const body = lines.map((line) => {
     const text = typeof line === "string" ? line : line.text ?? "";
