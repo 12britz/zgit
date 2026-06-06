@@ -1,7 +1,6 @@
 import { colors, box, info } from "./utils.js";
 
 export function handleHelp() {
-  const title = "COMMANDS";
   const lines = [
     "init [path]             Initialize repository",
     "clone <url> [path]      Clone repository",
@@ -23,5 +22,5 @@ export function handleHelp() {
     `${info("Run")} ${colors.bold}zgit <command> --help${colors.reset} ${info("for details")}`,
   ];
 
-  console.log(box(title, lines, { color: colors.cyan, icon: "" }));
+  console.log(box("COMMANDS", lines, { color: colors.cyan }));
 }
