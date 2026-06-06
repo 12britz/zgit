@@ -1,5 +1,5 @@
 export function showBanner() {
-  const banner = `░██   ░██    
+  return `░██   ░██    
                             ░██    
 ░█████████  ░████████ ░██░████████ 
      ░███  ░██    ░██ ░██   ░██    
@@ -8,6 +8,4 @@ export function showBanner() {
 ░█████████  ░█████░██ ░██    ░████ 
                   ░██              
             ░███████`;
-
-  console.log(`\x1b[1m${banner}\x1b[0m`);
 }

@@ -141,8 +141,7 @@ program
   .action((opts, name) => handleTag({ ...opts, name }));
 
 if (process.argv.length <= 2) {
-  const bannerLines = showBanner().split("\n");
-  console.log(box("zgit", bannerLines, { color: colors.cyan }));
+  console.log(showBanner());
   handleHelp();
   process.exit(0);
 }
