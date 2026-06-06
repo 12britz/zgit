@@ -1,7 +1,7 @@
 import { colors, box, info } from "./utils.js";
 
 export function handleHelp() {
-  const title = "Commands";
+  const title = "COMMANDS";
   const lines = [
     "init [path]             Initialize repository",
     "clone <url> [path]      Clone repository",
