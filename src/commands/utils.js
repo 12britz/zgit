@@ -88,3 +88,7 @@ export function success(text) {
 export function error(text) {
   return `${colors.red}✘${colors.reset} ${text}`;
 }
+
+export function info(text) {
+  return `${colors.cyan}ℹ${colors.reset} ${text}`;
+}
