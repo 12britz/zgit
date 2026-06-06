@@ -1,6 +1,7 @@
 {
-  "name": "zgit",
+  "name": "@12britz/zgit",
   "version": "1.0.0",
+
   "description": "A beautifully colored git alternative",
   "type": "module",
   "main": "src/index.js",
