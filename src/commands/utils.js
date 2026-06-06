@@ -71,15 +71,6 @@ export function statusColor(status) {
   return colors.white;
 }
 
-export function statusColor(status) {
-  if (status.startsWith("A")) return colors.green;
-  if (status.startsWith("M")) return colors.yellow;
-  if (status.startsWith("D")) return colors.red;
-  if (status.startsWith("R")) return colors.cyan;
-  if (status.startsWith("?")) return colors.dim;
-  return colors.white;
-}
-
 export function statusIcon(status) {
   if (status.startsWith("A")) return "✨";
   if (status.startsWith("M")) return "📝";
