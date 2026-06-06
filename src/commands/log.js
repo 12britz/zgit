@@ -1,4 +1,4 @@
-import { getGit, colors, box, success } from "./utils.js";
+import { getGit, colors } from "./utils.js";
 
 export async function handleLog(options) {
   const git = getGit();
@@ -12,20 +12,17 @@ export async function handleLog(options) {
     const rows = (log.all || []).map((entry) => ({
       hash: String(entry.hash || "").slice(0, 7),
       message: String(entry.message || "").trim(),
-      date: entry.date ? new Date(entry.date).toLocaleString() : "",
     }));
 
     if (!rows.length) {
-      console.log(`${box("Logs", ["No commits found."], { color: colors.dim })}\n`);
+      console.log("No commits found.\n");
       return;
     }
 
-    const title = options.graph ? "Graph" : "Logs";
-    const lines = options.graph
-      ? rows.map((r) => `${colors.cyan}${r.hash}${colors.reset} ${r.message}`)
-      : rows.map((r) => `${colors.cyan}${r.hash}${colors.reset}  ${r.message}  ${colors.dim}${r.date}${colors.reset}`);
-
-    console.log(box(title, lines, { color: colors.cyan }));
+    for (const r of rows) {
+      console.log(`${colors.cyan}${r.hash}${colors.reset}  ${r.message}`);
+    }
+    console.log("");
   } catch (err) {
     console.log(`${error(err.message)}\n`);
   }
