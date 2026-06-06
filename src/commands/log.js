@@ -1,17 +1,19 @@
-import { getGit, colors } from "./utils.js";
+import { getGit, colors, box } from "./utils.js";
 
 export async function handleLog(options) {
   const git = getGit();
   try {
     const args = [];
     if (options.count) args.push("-n", options.count);
-    if (options.graph) args.push("--graph");
+    if (options.graph) args.push("--graph --all");
     if (options.oneline) args.push("--oneline");
 
     const log = await git.log(args);
     const rows = (log.all || []).map((entry) => ({
       hash: String(entry.hash || "").slice(0, 7),
       message: String(entry.message || "").trim(),
+      author: entry.author_name || "",
+      date: entry.date ? new Date(entry.date).toLocaleString() : "",
     }));
 
     if (!rows.length) {
@@ -19,10 +21,27 @@ export async function handleLog(options) {
       return;
     }
 
-    for (const r of rows) {
-      console.log(`${colors.cyan}${r.hash}${colors.reset}  ${r.message}`);
+    const title = options.graph ? "Graph" : "Logs";
+    let summary = "";
+    let lines = [];
+
+    if (options.graph) {
+      const raw = await git.raw(["log", ...args, "--format=%C(green)%h%C(reset) %s %C(dim)(%ar)%C(reset)"]);
+      console.log(`  ${colors.bold(title)}`);
+      console.log(raw || "  No commits found.");
+      return;
     }
-    console.log("");
+
+    for (const r of rows) {
+      const marker = `${colors.green}●${colors.reset}`;
+      const hash = `${colors.cyan}${r.hash}${colors.reset}`;
+      const meta = `${colors.dim}${r.author} · ${r.date}${colors.reset}`;
+      lines.push(`${marker} ${hash}  ${r.message}`);
+      lines.push(`   ${meta}`);
+    }
+
+    summary = `${colors.yellow}─── ${String(rows.length)} commits shown ───${colors.reset}`;
+    console.log(`${box(title, lines, { color: colors.cyan })}\n${summary}\n`);
   } catch (err) {
     console.log(`${error(err.message)}\n`);
   }
