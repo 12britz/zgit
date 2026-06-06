@@ -1,4 +1,4 @@
-# zgit — Git, Visualized.
+# zgit — Git, visualized.
 
 ```bash
 npm install -g @12britz/zgit
@@ -22,34 +22,32 @@ npm install -g @12britz/zgit
             ░███████
 ```
 
-**Git, without the gray screen.**
+**Git, without the gray blur.**
 
-`zgit` replaces `git` in your terminal with a modern, colorful, information-dense CLI.
-Same commands. Richer feedback. Built for developers who ship fast.
-
----
-
-## Why zgit
-
-Terminal git is functional, but it's also forgettable. `zgit` adds visual signal without breaking muscle memory:
-
-| | git | zgit |
-|:--|:--|:--|
-| Log | Plain text | Colored hash + author + time |
-| Status | Symbols only | Sectioned tree + file counts |
-| Diff | Raw patch | Hunks + headers + alignment |
-| Branches | Text list | Active marker + clean rows |
-| Feel | 1980s | 2020s |
+`zgit` is a modern wrapper for `git` with richer output, visual history, and a developer experience that respects your time.
+Same workflow. Better signals.
 
 ---
 
-## Install
+## why
+
+Terminal git leaves a lot to the imagination. `zgit` adds context and color without getting in the way.
+
+- **`log`**: colored hash, message, author, and date
+- **`status`**: sectioned working tree with counts and icons
+- **`diff`**: formatted hunks and headers
+- **`branch`**: active marker and clean rows
+- **`help`**: scannable command list
+
+---
+
+## install
 
 ```bash
 npm install -g @12britz/zgit
 ```
 
-Or try it instantly:
+or
 
 ```bash
 npx @12britz/zgit log
@@ -57,76 +55,45 @@ npx @12britz/zgit log
 
 ---
 
-## Quick Start
+## quick start
 
 ```bash
-# working tree state
 zgit status
-
-# visual log
 zgit log
-
-# compact log
 zgit log --oneline
-
-# branch graph
 zgit log --graph
-
-# file staging
 zgit add .
-
-# commit
 zgit commit -m "hello"
-
-# branch switch
 zgit switch main
 ```
 
 ---
 
-## What you get
+## commands
 
-- **Rich `log`** — colored hashes, author, time, and clean story lines
-- **Clear `status`** — scannable working tree sections with file counts
-- **Polished `diff`** — colored hunks and readable headers
-- **Branches** — active marker and clean list view
-- **Box outputs** — formatted `remote`, `tag`, `branch`, and more
-- **CLI-native** — keyboard-first, fast, no electron
-
----
-
-## Commands at a glance
-
-| Command | Use when |
+| command | use when |
 |:--|:--|
-| `status / st` | You want to know where you are |
-| `log` | You want readable history |
-| `diff [file]` | You want precise changes |
-| `add [path]` | You're staging work |
-| `commit -m "msg"` | You're saving progress |
-| `branch` | You're managing flow |
-| `switch / sw <name>` | You're changing context |
-| `stash` | You need a clean pane |
-| `reset [ref]` | You're backing out |
-| `merge <branch>` | You're joining work |
-| `pull [remote]` | You're syncing up |
-| `push [remote]` | You're publishing |
-| `remote` | You're checking origins |
-| `tag [name]` | You're marking releases |
+| `status / st` | checking tree state |
+| `log` | reading history |
+| `diff [file]` | reviewing changes |
+| `add [path]` | staging work |
+| `commit -m "msg"` | saving progress |
+| `branch` | managing flow |
+| `switch / sw <name>` | changing branches |
+| `stash` | cleaning context |
+| `reset [ref]` | undoing safely |
+| `merge <branch>` | joining work |
+| `pull [remote]` | syncing |
+| `push [remote]` | publishing |
+| `remote` | checking origins |
+| `tag [name]` | marking releases |
 
 ---
 
-## Design principles
+## principles
 
-- **Clarity over decoration**
-- **Information density without noise**
-- **Drop-in friendly, opinionated where it matters**
-- **Beautiful by default**
-- **No boxes, just lines**
-
----
-
-## Support
-
-- Issues: [12britz/zgit](https://github.com/12britz/zgit/issues)
-- PRs welcome
+- clarity over noise
+- information-dense, not cluttered
+- drop-in, not rewrite-the-world
+- fast keys, no mouse
+- beautiful by default

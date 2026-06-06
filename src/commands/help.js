@@ -18,9 +18,8 @@ export function handleHelp() {
     "push [remote]           Upload commits",
     "remote                  Manage remotes",
     "tag [name]              List / create tags",
-    "",
-    `${info("Run")} ${colors.bold}zgit <command> --help${colors.reset} ${info("for details")}`,
   ];
 
-  console.log(box("COMMANDS", lines, { color: colors.cyan }));
+  console.log(box("commands", lines, { color: colors.cyan }));
+  console.log(`  ${info("Run")} ${colors.bold}zgit <command> --help${colors.reset} ${info("for details")}\n`);
 }

@@ -13,24 +13,16 @@ export async function handleLog(options) {
       hash: String(entry.hash || "").slice(0, 7),
       message: String(entry.message || "").trim(),
       author: entry.author_name || "",
-      date: entry.date ? new Date(entry.date).toLocaleString() : "",
+      date: entry.date ? new Date(entry.date).toLocaleDateString() : "",
     }));
 
     if (!rows.length) {
-      console.log("No commits found.\n");
+      console.log(`${box("Logs", ["Nothing here yet"], { color: colors.dim })}\n`);
       return;
     }
 
     const title = options.graph ? "Graph" : "Logs";
-
-    if (options.graph) {
-      const raw = await git.raw(["log", ...args, "--format=%C(green)%h%C(reset) %s %C(dim)(%ar)%C(reset)"]);
-      console.log(`  ${colors.bold(title)}`);
-      console.log(raw || "  No commits found.");
-      return;
-    }
-
-    const lines = rows.map((r) => `${colors.cyan}${r.hash}${colors.reset}  ${r.message}`);
+    const lines = rows.map((r) => `${colors.cyan}${r.hash}${colors.reset}  ${r.message}  ${colors.dim}${r.date}${colors.reset}`);
 
     console.log(box(title, lines, { color: colors.cyan }));
   } catch (err) {

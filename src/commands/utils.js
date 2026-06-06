@@ -16,6 +16,8 @@ export const colors = {
   white: "\x1b[37m",
   magenta: "\x1b[35m",
   blue: "\x1b[34m",
+  bgBlue: "\x1b[44m",
+  bgGreen: "\x1b[42m",
 };
 
 function ansiLen(str) {
@@ -24,24 +26,44 @@ function ansiLen(str) {
 
 export function box(title, lines = [], options = {}) {
   const color = options.color ?? colors.cyan;
-  const header = `${color}${colors.bold}${title}${colors.reset}`;
-  const underline = `${color}${"─".repeat(ansiLen(title))}${colors.reset}`;
-  const pad = options.pad ?? 0;
 
-  const body = lines
-    .map((line) => {
-      const text = typeof line === "string" ? line : line.text ?? "";
-      const rawColor = typeof line === "object" && line.color ? line.color : null;
-      const out = rawColor ? `${rawColor}${text}${colors.reset}` : text;
-      return " ".repeat(pad) + out;
-    })
-    .join("\n");
+  const plainLines = lines.map((line) => {
+    const text = typeof line === "string" ? line : line.text ?? "";
+    return ansiLen(text);
+  });
 
-  if (!body) {
-    return `${header}\n${underline}`;
-  }
+  const titleLen = title ? ansiLen(title) : 0;
+  const contentWidth = Math.max(0, titleLen, ...plainLines);
+  const inner = contentWidth;
 
-  return `${header}\n${underline}\n${body}`;
+  const top = `${color}╭${"─".repeat(inner)}╮${colors.reset}`;
+  const divider = `${color}├${"─".repeat(inner)}┤${colors.reset}`;
+  const bot = `${color}╰${"─".repeat(inner)}╯${colors.reset}`;
+
+  const row = (content = "") => {
+    const visible = ansiLen(content);
+    const space = inner - visible;
+    return `${color}│${colors.reset} ${content}${" ".repeat(Math.max(0, space))} ${color}│${colors.reset}`;
+  };
+
+  const headerLine =
+    title || title === ""
+      ? `${color}${colors.bold}${title}${colors.reset}`
+      : null;
+
+  const renderedHeader = headerLine
+    ? [row(headerLine)]
+    : [];
+
+  const body = lines.map((line) => {
+    const text = typeof line === "string" ? line : line.text ?? "";
+    const rawColor = typeof line === "object" && line.color ? line.color : null;
+    const out = rawColor ? `${rawColor}${text}${colors.reset}` : text;
+    return row(out);
+  });
+
+  const out = [top, ...renderedHeader, divider, ...body, bot];
+  return out.join("\n");
 }
 
 export function statusColor(status) {
