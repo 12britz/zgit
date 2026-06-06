@@ -48,7 +48,7 @@ export function box(title, lines = [], options = {}) {
 
   const header =
     title || title === ""
-      ? row(`${color}${colors.bold} ${title} ${colors.reset}`.trim())
+      ? row(`${color}${colors.bold} ${title}${colors.reset}`)
       : null;
 
   const body = lines.map((line) => {
