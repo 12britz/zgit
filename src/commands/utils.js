@@ -1,7 +1,6 @@
 import SimpleGit from "simple-git";
 
 let cwdInstance = new SimpleGit(process.cwd());
-
 export function getGit() {
   return cwdInstance;
 }
@@ -25,75 +24,57 @@ function ansiLen(str) {
 
 export function box(title, lines = [], options = {}) {
   const pad = options.pad ?? 1;
-  const icon = options.icon ?? "";
   const color = options.color ?? colors.cyan;
-  const maxLen =
-    Math.max(title.length, ...lines.map((l) => ansiLen(l))) + pad * 2 + 2;
 
-  const divider = color + "─".repeat(maxLen) + colors.reset;
-  const top = color + "┌" + "─".repeat(maxLen - 2) + "┐" + colors.reset;
-  const mid = color + "├" + "─".repeat(maxLen - 2) + "┤" + colors.reset;
-  const bot = color + "└" + "─".repeat(maxLen - 2) + "┘" + colors.reset;
+  const plainLines = lines.map((line) => {
+    const text = typeof line === "string" ? line : line.text ?? "";
+    return ansiLen(text);
+  });
+
+  const titleLen = title ? ansiLen(title) : 0;
+  const contentWidth = Math.max(0, titleLen, ...plainLines);
+  const inner = contentWidth + pad * 2;
+  const width = inner + 2;
+
+  const top = color + "┌" + "─".repeat(inner) + "┐" + colors.reset;
+  const divider = color + "├" + "─".repeat(inner) + "┤" + colors.reset;
+  const bot = color + "└" + "─".repeat(inner) + "┘" + colors.reset;
 
   const row = (content = "") => {
     const visible = ansiLen(content);
-    const inner = maxLen - 2;
     const space = inner - visible;
     return `${color}│${colors.reset} ${content}${" ".repeat(Math.max(0, space))} ${color}│${colors.reset}`;
   };
 
   const header =
-    icon || title
-      ? row(
-          `${color}${colors.bold} ${icon} ${title.toUpperCase()} ${colors.reset}`.trim()
-        )
+    title || title === ""
+      ? row(`${color}${colors.bold} ${title} ${colors.reset}`.trim())
       : null;
 
-  const body = lines.map(row);
+  const body = lines.map((line) => {
+    const text = typeof line === "string" ? line : line.text ?? "";
+    const rawColor = typeof line === "object" && line.color ? line.color : null;
+    const out = rawColor ? `${rawColor}${text}${colors.reset}` : text;
+    return row(out);
+  });
 
-  const out = [
-    "",
-    top,
-    header,
-    header ? mid : null,
-    ...body,
-    bot,
-    "",
-  ].filter(Boolean);
-
+  const out = [top, header, divider, ...body, bot];
   return out.join("\n");
 }
 
-export function statusIcon(status) {
-  if (status.startsWith("A")) return "✨";
-  if (status.startsWith("M")) return "📝";
-  if (status.startsWith("D")) return "🗑️";
-  if (status.startsWith("R")) return "🔀";
-  if (status.startsWith("C")) return "📋";
-  if (status.startsWith("??")) return "🆕";
-  return "📄";
-}
-
-export function colorStatus(status) {
+export function statusColor(status) {
   if (status.startsWith("A")) return colors.green;
   if (status.startsWith("M")) return colors.yellow;
   if (status.startsWith("D")) return colors.red;
   if (status.startsWith("R")) return colors.cyan;
-  return colors.dim;
+  if (status.startsWith("?")) return colors.dim;
+  return colors.white;
 }
 
-export function success(label) {
-  return `${colors.green}✔${colors.reset} ${label}`;
+export function success(text) {
+  return `${colors.green}✔${colors.reset} ${text}`;
 }
 
-export function error(label) {
-  return `${colors.red}✘${colors.reset} ${label}`;
-}
-
-export function info(label) {
-  return `${colors.cyan}ℹ${colors.reset} ${label}`;
-}
-
-export function warn(label) {
-  return `${colors.yellow}⚠${colors.reset} ${label}`;
+export function error(text) {
+  return `${colors.red}✘${colors.reset} ${text}`;
 }
