@@ -36,7 +36,7 @@ export async function handleStash(options) {
               "No stashes to show.",
               "Use 'zgit stash' while you have local changes to save a stash.",
             ],
-            { color: colors.dim, title: "Stashes" }
+            { color: colors.yellow }
           )
         );
         return;
@@ -45,8 +45,8 @@ export async function handleStash(options) {
       console.log(
         box(
           "Stashes",
-          stashLines.map((line) => line),
-          { color: colors.cyan, title: "Stashes" }
+          stashLines.map((line) => `● ${line}`),
+          { color: colors.cyan, style: "open" }
         )
       );
       return;
@@ -57,7 +57,7 @@ export async function handleStash(options) {
       box(
         "Stashed",
         [
-          "Saved working directory and index state WIP on <branch>: <commit>",
+          "Saved working directory and index state WIP.",
           "(use 'zgit stash list' to see stashes)",
           "(use 'zgit stash pop' to apply the latest stash)",
         ],
@@ -74,3 +74,4 @@ export async function handleStash(options) {
     );
   }
 }
+

@@ -8,10 +8,11 @@ export async function handleSwitch(name) {
       box(
         "Switched",
         [`Now on branch: ${colors.bold}${name}${colors.reset}`, "", `${success("Done")}`],
-        { color: colors.green, icon: "" }
+        { color: colors.green }
       )
     );
   } catch (err) {
-    console.log(`${box("Switch Failed", [err.message], { color: colors.red, icon: "!" })}\n`);
+    console.log(`${box("Switch Failed", [err.message], { color: colors.red })}\n`);
   }
 }
+

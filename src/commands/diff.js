@@ -8,7 +8,7 @@ export async function handleDiff(options, file) {
 
     if (!diff) {
       console.log(
-        box("Diff", ["No changes to show"], { color: colors.green, icon: "" })
+        box("Diff", ["No changes to show"], { color: colors.green })
       );
       return;
     }
@@ -18,13 +18,14 @@ export async function handleDiff(options, file) {
       if (line.startsWith("+") && !line.startsWith("+++")) return `${colors.green}${line}${colors.reset}`;
       if (line.startsWith("-") && !line.startsWith("---")) return `${colors.red}${line}${colors.reset}`;
       if (line.startsWith("@@")) return `${colors.magenta}${line}${colors.reset}`;
-      if (line.startsWith("diff --git")) return `${colors.cyan}${line}${colors.reset}`;
+      if (line.startsWith("diff --git")) return `${colors.cyan}${colors.bold}${line}${colors.reset}`;
       if (line.startsWith("---") || line.startsWith("+++")) return `${colors.dim}${line}${colors.reset}`;
       return line;
     });
 
-    console.log(box(msg, colored, { color: colors.cyan, icon: "" }));
+    console.log(box(msg, colored, { color: colors.cyan, style: "open" }));
   } catch (err) {
-    console.log(`${box("Diff", [err.message], { color: colors.red, icon: "" })}\n`);
+    console.log(`${box("Diff Error", [err.message], { color: colors.red, style: "open" })}\n`);
   }
 }
+

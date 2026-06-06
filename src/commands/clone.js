@@ -8,15 +8,16 @@ export async function handleClone(url, path) {
       box(
         "Cloned",
         [
-          `${colors.green}✔${colors.reset} Success`,
+          `${success("Success")}`,
           ``,
           `From: ${colors.cyan}${url}${colors.reset}`,
           `To:   ${colors.bold}${target}${colors.reset}`,
         ],
-        { color: colors.green, icon: "" }
+        { color: colors.green }
       )
     );
   } catch (err) {
-    console.log(`${box("Clone Failed", [err.message], { color: colors.red, icon: "!" })}\n`);
+    console.log(`${box("Clone Failed", [err.message], { color: colors.red })}\n`);
   }
 }
+

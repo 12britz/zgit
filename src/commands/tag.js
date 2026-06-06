@@ -16,7 +16,7 @@ export async function handleTag(options) {
             `Name:    ${colors.bold}${name}${colors.reset}`,
             options.message ? `Message: ${colors.dim}${options.message}${colors.reset}` : "",
           ],
-          { color: colors.green, icon: "" }
+          { color: colors.green }
         )
       );
       return;
@@ -24,18 +24,19 @@ export async function handleTag(options) {
 
     const tags = await git.tags();
     if (!tags.all.length) {
-      console.log(box("Tags", ["No tags found."], { color: colors.dim, icon: "" }));
+      console.log(box("Tags", ["No tags found."], { color: colors.yellow }));
       return;
     }
 
     console.log(
       box(
         "Tags",
-        tags.all.map((t) => `${colors.yellow}${t}${colors.reset}`),
-        { color: colors.yellow, icon: "" }
+        tags.all.map((t) => `● ${colors.yellow}${t}${colors.reset}`),
+        { color: colors.yellow }
       )
     );
   } catch (err) {
-    console.log(`${box("Tag Failed", [err.message], { color: colors.red, icon: "!" })}\n`);
+    console.log(`${box("Tag Failed", [err.message], { color: colors.red })}\n`);
   }
 }
+

@@ -1,4 +1,4 @@
-import { getGit, colors, box } from "./utils.js";
+import { getGit, colors, box, success } from "./utils.js";
 
 export async function handlePullPush(action, remote) {
   const git = getGit();
@@ -10,9 +10,9 @@ export async function handlePullPush(action, remote) {
           "Pulled",
           [
             `From: ${colors.bold}${remote || "origin"}${colors.reset}`,
-            `${colors.green}✔${colors.reset} Synced`,
+            `${success("Synced")}`,
           ],
-          { color: colors.green, icon: "" }
+          { color: colors.green }
         )
       );
     } else {
@@ -20,14 +20,15 @@ export async function handlePullPush(action, remote) {
       console.log(
         box(
           "Pushed",
-          [`To: ${colors.bold}${remote || "origin"}${colors.reset}`, `${colors.green}✔${colors.reset} Uploaded`],
-          { color: colors.green, icon: "" }
+          [`To: ${colors.bold}${remote || "origin"}${colors.reset}`, `${success("Uploaded")}`],
+          { color: colors.green }
         )
       );
     }
   } catch (err) {
     console.log(
-      `${box(action === "pull" ? "Pull Failed" : "Push Failed", [err.message], { color: colors.red, icon: "!" })}\n`
+      `${box(action === "pull" ? "Pull Failed" : "Push Failed", [err.message], { color: colors.red })}\n`
     );
   }
 }
+

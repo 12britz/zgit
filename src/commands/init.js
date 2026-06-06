@@ -9,10 +9,11 @@ export async function handleInit(path) {
       box(
         "Initialized",
         [`New repository created at:`, `${colors.bold}${target}${colors.reset}`],
-        { color: colors.green, icon: "" }
+        { color: colors.green }
       )
     );
   } catch (err) {
-    console.log(`${box("Error", [err.message], { color: colors.red, icon: "!" })}\n`);
+    console.log(`${box("Error", [err.message], { color: colors.red })}\n`);
   }
 }
+

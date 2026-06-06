@@ -12,10 +12,11 @@ export async function handleCommit(options) {
           "",
           `${success("Success")}`,
         ],
-        { color: colors.green, icon: "" }
+        { color: colors.green }
       )
     );
   } catch (err) {
-    console.log(`${box("Commit", [err.message], { color: colors.red, icon: "!" })}\n`);
+    console.log(`${box("Commit Failed", [err.message], { color: colors.red })}\n`);
   }
 }
+

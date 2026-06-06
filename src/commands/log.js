@@ -1,11 +1,23 @@
-import { getGit, colors, box } from "./utils.js";
+import { getGit, colors, box, error } from "./utils.js";
 
 export async function handleLog(options) {
   const git = getGit();
   try {
+    const count = options.count || "10";
+    
+    if (options.graph) {
+      // For graph, we use git.raw to preserve the ASCII graph output
+      const rawGraph = await git.raw(["log", "--graph", "--all", "--oneline", "-n", count]);
+      const lines = rawGraph.split("\n").filter(line => line.trim().length > 0);
+      
+      console.log(
+        box("Graph", lines, { color: colors.magenta, style: "open" })
+      );
+      return;
+    }
+
     const args = [];
-    if (options.count) args.push("-n", options.count);
-    if (options.graph) args.push("--graph --all");
+    args.push("-n", count);
     if (options.oneline) args.push("--oneline");
 
     const log = await git.log(args);
@@ -21,11 +33,20 @@ export async function handleLog(options) {
       return;
     }
 
-    const title = options.graph ? "Graph" : "Logs";
-    const lines = rows.map((r) => `${colors.cyan}${r.hash}${colors.reset}  ${r.message}  ${colors.dim}${r.date}${colors.reset}`);
+    let lines;
+    if (options.oneline) {
+      lines = rows.map((r) => `● ${colors.cyan}${r.hash}${colors.reset} ${r.message}`);
+    } else {
+      lines = rows.map((r) => {
+        const authorStr = r.author ? ` ${colors.dim}(by ${r.author})${colors.reset}` : "";
+        const dateStr = r.date ? ` ${colors.teal}${r.date}${colors.reset}` : "";
+        return `● ${colors.yellow}${r.hash}${colors.reset} ${r.message}${authorStr}${dateStr}`;
+      });
+    }
 
-    console.log(box(title, lines, { color: colors.cyan }));
+    console.log(box("Logs", lines, { color: colors.cyan, style: "open" }));
   } catch (err) {
     console.log(`${error(err.message)}\n`);
   }
 }
+

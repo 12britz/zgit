@@ -9,10 +9,11 @@ export async function handleAdd(paths) {
       box(
         "Added",
         [files.join(", "), "", `${success("Ready for commit")}`],
-        { color: colors.green, icon: "" }
+        { color: colors.green }
       )
     );
   } catch (err) {
-    console.log(`${box("Add Failed", [err.message], { color: colors.red, icon: "!" })}\n`);
+    console.log(`${box("Add Failed", [err.message], { color: colors.red })}\n`);
   }
 }
+

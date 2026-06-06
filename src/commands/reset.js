@@ -14,10 +14,11 @@ export async function handleReset(ref, options) {
           "",
           `${warn("Irreversible")}`,
         ],
-        { color: colors.yellow, icon: "" }
+        { color: colors.yellow }
       )
     );
   } catch (err) {
-    console.log(`${box("Reset Failed", [err.message], { color: colors.red, icon: "!" })}\n`);
+    console.log(`${box("Reset Failed", [err.message], { color: colors.red })}\n`);
   }
 }
+

@@ -8,10 +8,11 @@ export async function handleMerge(branch) {
       box(
         "Merged",
         [`Branch: ${colors.bold}${branch}${colors.reset}`, "", `${success("Success")}`],
-        { color: colors.green, icon: "" }
+        { color: colors.green }
       )
     );
   } catch (err) {
-    console.log(`${box("Merge Failed", [err.message], { color: colors.red, icon: "!" })}\n`);
+    console.log(`${box("Merge Failed", [err.message], { color: colors.red })}\n`);
   }
 }
+
