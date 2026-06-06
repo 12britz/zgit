@@ -1,4 +1,4 @@
-import { getGit, colors, box, statusIcon, colorStatus, success, info } from "./utils.js";
+import { getGit, colors, box, statusIcon, success, info } from "./utils.js";
 
 export async function handleStatus(options) {
   const git = getGit();
