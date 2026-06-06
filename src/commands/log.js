@@ -22,8 +22,6 @@ export async function handleLog(options) {
     }
 
     const title = options.graph ? "Graph" : "Logs";
-    let summary = "";
-    let lines = [];
 
     if (options.graph) {
       const raw = await git.raw(["log", ...args, "--format=%C(green)%h%C(reset) %s %C(dim)(%ar)%C(reset)"]);
@@ -32,16 +30,9 @@ export async function handleLog(options) {
       return;
     }
 
-    for (const r of rows) {
-      const marker = `${colors.green}●${colors.reset}`;
-      const hash = `${colors.cyan}${r.hash}${colors.reset}`;
-      const meta = `${colors.dim}${r.author} · ${r.date}${colors.reset}`;
-      lines.push(`${marker} ${hash}  ${r.message}`);
-      lines.push(`   ${meta}`);
-    }
+    const lines = rows.map((r) => `${colors.cyan}${r.hash}${colors.reset}  ${r.message}`);
 
-    summary = `${colors.yellow}─── ${String(rows.length)} commits shown ───${colors.reset}`;
-    console.log(`${box(title, lines, { color: colors.cyan })}\n${summary}\n`);
+    console.log(box(title, lines, { color: colors.cyan }));
   } catch (err) {
     console.log(`${error(err.message)}\n`);
   }
