@@ -31,6 +31,8 @@ program
   .command("init")
   .description("Initialize a new git repository")
   .argument("[path]", "directory to initialize")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((path) => handleInit(path));
 
 program
@@ -38,6 +40,8 @@ program
   .description("Clone a repository")
   .argument("<url>", "repository URL")
   .argument("[path]", "directory to clone into")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((url, path) => handleClone(url, path));
 
 program
@@ -46,6 +50,8 @@ program
   .description("Show working tree status")
   .option("-s, --short", "short format")
   .option("--branch", "show branch info")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((opts) => handleStatus(opts));
 
 program
@@ -54,6 +60,8 @@ program
   .option("-n, --count <number>", "number of commits", "5")
   .option("--graph", "show ASCII graph")
   .option("--oneline", "compact format")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((opts) => handleLog(opts));
 
 program
@@ -61,12 +69,16 @@ program
   .description("Show changes between commits or working tree")
   .option("--cached", "staged changes only")
   .argument("[file]", "specific file")
-  .action((opts, file) => handleDiff(opts, file));
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
+  .action((file, opts) => handleDiff(opts, file));
 
 program
   .command("add")
   .description("Stage changes")
   .argument("[paths...]", "file(s) to stage")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((paths) => handleAdd(paths));
 
 program
@@ -75,6 +87,8 @@ program
   .option("-m, --message <msg>", "commit message")
   .option("-a, --all", "commit all tracked changes")
   .option("--amend", "amend previous commit")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((opts) => handleCommit(opts));
 
 program
@@ -83,6 +97,8 @@ program
   .option("-d, --delete <name>", "delete branch")
   .option("-m, --move <name>", "rename branch")
   .option("--list", "list branches")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((opts) => handleBranch(opts));
 
 program
@@ -90,6 +106,8 @@ program
   .alias("sw")
   .description("Switch branches or restore files")
   .argument("<name>", "branch name")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((name) => handleSwitch(name));
 
 program
@@ -97,6 +115,8 @@ program
   .description("Stash changes")
   .option("--pop", "apply and remove stash")
   .option("--list", "list stashes")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((opts) => handleStash(opts));
 
 program
@@ -105,24 +125,32 @@ program
   .argument("[ref]", "commit reference", "HEAD")
   .option("--soft", "soft reset")
   .option("--hard", "hard reset")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((ref, opts) => handleReset(ref, opts));
 
 program
   .command("merge")
   .description("Merge branches")
   .argument("<branch>", "branch to merge")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((branch) => handleMerge(branch));
 
 program
   .command("pull")
   .description("Fetch and integrate changes")
   .argument("[remote]", "remote name", "origin")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((remote) => handlePullPush("pull", remote));
 
 program
   .command("push")
   .description("Upload changes to remote")
   .argument("[remote]", "remote name", "origin")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((remote) => handlePullPush("push", remote));
 
 program
@@ -131,6 +159,8 @@ program
   .option("-v, --verbose", "show URLs")
   .option("--add-name <name>", "add remote name")
   .option("--add-url <url>", "add remote url")
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
   .action((opts) => handleRemote(opts));
 
 program
@@ -138,7 +168,9 @@ program
   .description("List or create tags")
   .argument("[name]", "optional tag name")
   .option("-m, --message <msg>", "annotation message")
-  .action((opts, name) => handleTag({ ...opts, name }));
+  .allowUnknownOption(true)
+  .allowExcessArguments(true)
+  .action((name, opts) => handleTag({ name, ...opts }));
 
 if (process.argv.length <= 2) {
   console.log(showBanner());

@@ -1,7 +1,17 @@
-import { getGit, colors, box, error } from "./utils.js";
+import { getGit, colors, box, error, getPassthroughArgs } from "./utils.js";
 
 export async function handleLog(options) {
+  const passthrough = getPassthroughArgs("log");
   const git = getGit();
+  if (passthrough.length) {
+    try {
+      const result = await git.raw(["log", ...passthrough]);
+      console.log(result);
+    } catch (err) {
+      console.log(`${error(err.message)}\n`);
+    }
+    return;
+  }
   try {
     const count = options.count || "10";
     

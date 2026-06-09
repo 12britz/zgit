@@ -1,7 +1,17 @@
-import { getGit, colors, box, statusIcon, success, info, error } from "./utils.js";
+import { getGit, colors, box, statusIcon, success, info, error, getPassthroughArgs } from "./utils.js";
 
 export async function handleStatus(options) {
+  const passthrough = getPassthroughArgs("status", ["st"]);
   const git = getGit();
+  if (passthrough.length) {
+    try {
+      const result = await git.raw(["status", ...passthrough]);
+      console.log(result);
+    } catch (err) {
+      console.log(`${error(err.message)}\n`);
+    }
+    return;
+  }
   try {
     const status = await git.status();
 

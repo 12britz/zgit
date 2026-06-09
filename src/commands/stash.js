@@ -1,18 +1,30 @@
-import { execFile } from "node:child_process";
-import { promisify } from "node:util";
-import { getGit, colors, box, success } from "./utils.js";
-
-const exec = promisify(execFile);
+import { getGit, colors, box, success, getPassthroughArgs } from "./utils.js";
 
 export async function handleStash(options) {
+  const passthrough = getPassthroughArgs("stash");
+  if (passthrough.length) {
+    try {
+      const result = await getGit().raw(["stash", ...passthrough]);
+      console.log(result);
+    } catch (err) {
+      console.log(
+        box(
+          "Stash Failed",
+          [err.message || "Something went wrong while running stash."],
+          { color: colors.red }
+        )
+      );
+    }
+    return;
+  }
   try {
     if (options.pop) {
-      const { stdout } = await exec("git", ["stash", "pop"]);
+      const result = await getGit().raw(["stash", "pop"]);
       console.log(
         box(
           "Stash",
           [
-            stdout.trim() || "Popped the most recent stash and restored the working tree.",
+            result.trim() || "Popped the most recent stash and restored the working tree.",
             `You can continue working on the files you just restored.`,
           ],
           { color: colors.green }
@@ -22,8 +34,8 @@ export async function handleStash(options) {
     }
 
     if (options.list) {
-      const { stdout } = await exec("git", ["stash", "list"]);
-      const stashLines = stdout
+      const result = await getGit().raw(["stash", "list"]);
+      const stashLines = result
         .split("\n")
         .map((line) => line.trim())
         .filter(Boolean);

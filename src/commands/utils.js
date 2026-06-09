@@ -6,6 +6,80 @@ export function getGit() {
   return cwdInstance;
 }
 
+const KNOWN_OPTS = {
+  init: [[], ["path"]],
+  clone: [[], ["url", "path"]],
+  status: [["short", "branch"], ["st"]],
+  log: [["count", "graph", "oneline"], []],
+  diff: [["cached"], ["file"]],
+  add: [[], ["paths"]],
+  commit: [["message", "all", "amend"], []],
+  branch: [["delete", "move", "list"], []],
+  switch: [[], ["name"]],
+  stash: [["pop", "list"], []],
+  reset: [["soft", "hard"], ["ref"]],
+  merge: [[], ["branch"]],
+  pull: [[], ["remote"]],
+  push: [[], ["remote"]],
+  remote: [["verbose", "addName", "addUrl"], []],
+  tag: [["message"], ["name"]],
+};
+
+export function getPassthroughArgs(cmdName, aliases = []) {
+  const names = [cmdName, ...aliases];
+  const idx = process.argv.findIndex((a, i) => i >= 2 && names.includes(a));
+  if (idx === -1) return [];
+
+  const known = KNOWN_OPTS[cmdName];
+  if (!known) return [];
+
+  const [longOpts, posArgs] = known;
+  const longSet = new Set(longOpts);
+  const posCount = posArgs.filter(a => !a.endsWith("...")).length;
+  const hasVariadic = posArgs.some(a => a.endsWith("..."));
+
+  const after = process.argv.slice(idx + 1);
+  const passthrough = [];
+  let posSeen = 0;
+
+  for (let i = 0; i < after.length; i++) {
+    const a = after[i];
+    if (a === "--") {
+      passthrough.push(a);
+      continue;
+    }
+    if (a.startsWith("--")) {
+      const eqIdx = a.indexOf("=");
+      const key = eqIdx !== -1 ? a.slice(2, eqIdx) : a.slice(2);
+      if (!longSet.has(key)) {
+        passthrough.push(a);
+        if (eqIdx === -1 && i + 1 < after.length && !after[i + 1].startsWith("-")) {
+          passthrough.push(after[++i]);
+        }
+      } else if (eqIdx === -1 && i + 1 < after.length && !after[i + 1].startsWith("-")) {
+        i++;
+      }
+    } else if (a.startsWith("-") && a.length === 2) {
+      const key = a.slice(1);
+      if (!longSet.has(key)) {
+        passthrough.push(a);
+        if (i + 1 < after.length && !after[i + 1].startsWith("-")) {
+          passthrough.push(after[++i]);
+        }
+      }
+    } else {
+      // positional
+      if (hasVariadic || posSeen < posCount) {
+        posSeen++;
+      } else {
+        passthrough.push(a);
+      }
+    }
+  }
+
+  return passthrough;
+}
+
 function hexToAnsi(hex, bg = false) {
   const num = parseInt(hex.replace("#", ""), 16);
   const r = (num >> 16) & 255;

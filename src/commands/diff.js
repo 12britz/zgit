@@ -1,7 +1,17 @@
-import { getGit, colors, box } from "./utils.js";
+import { getGit, colors, box, getPassthroughArgs } from "./utils.js";
 
 export async function handleDiff(options, file) {
+  const passthrough = getPassthroughArgs("diff");
   const git = getGit();
+  if (passthrough.length) {
+    try {
+      const result = await git.raw(["diff", ...passthrough]);
+      console.log(result);
+    } catch (err) {
+      console.log(`${box("Diff Error", [err.message], { color: colors.red, style: "open" })}\n`);
+    }
+    return;
+  }
   try {
     let msg = options.cached ? "Staged Changes" : file ? `Diff: ${file}` : "Working Tree Changes";
     const diff = options.cached ? await git.diffCached() : file ? await git.diff(file) : await git.diff();
