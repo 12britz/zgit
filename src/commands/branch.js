@@ -1,7 +1,17 @@
-import { getGit, colors, box, success } from "./utils.js";
+import { getGit, colors, box, success, getPassthroughArgs } from "./utils.js";
 
 export async function handleBranch(options) {
+  const passthrough = getPassthroughArgs("branch");
   const git = getGit();
+  if (passthrough.length) {
+    try {
+      const result = await git.raw(["branch", ...passthrough]);
+      console.log(result);
+    } catch (err) {
+      console.log(`${box("Branch Failed", [err.message], { color: colors.red })}\n`);
+    }
+    return;
+  }
   try {
     const toDelete = options.delete;
     if (toDelete) {

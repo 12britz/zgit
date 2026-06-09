@@ -1,7 +1,17 @@
-import { getGit, colors, box, success } from "./utils.js";
+import { getGit, colors, box, success, getPassthroughArgs } from "./utils.js";
 
 export async function handleSwitch(name) {
+  const passthrough = getPassthroughArgs("switch", ["sw"]);
   const git = getGit();
+  if (passthrough.length) {
+    try {
+      const result = await git.raw(["switch", name, ...passthrough]);
+      console.log(result);
+    } catch (err) {
+      console.log(`${box("Switch Failed", [err.message], { color: colors.red })}\n`);
+    }
+    return;
+  }
   try {
     await git.checkout(name);
     console.log(

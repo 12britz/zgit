@@ -1,7 +1,20 @@
-import { getGit, colors, box, success } from "./utils.js";
+import { getGit, colors, box, success, getPassthroughArgs } from "./utils.js";
 
 export async function handleTag(options) {
+  const passthrough = getPassthroughArgs("tag");
   const git = getGit();
+  if (passthrough.length) {
+    try {
+      const args = ["tag", ...passthrough];
+      if (options.name && !passthrough.includes(options.name)) args.push(options.name);
+      if (options.message) args.push("-m", options.message);
+      const result = await git.raw(args);
+      console.log(result);
+    } catch (err) {
+      console.log(`${box("Tag Failed", [err.message], { color: colors.red })}\n`);
+    }
+    return;
+  }
   try {
     const name = options.name;
     if (name) {

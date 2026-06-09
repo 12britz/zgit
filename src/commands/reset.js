@@ -1,7 +1,17 @@
-import { getGit, colors, box, success, warn } from "./utils.js";
+import { getGit, colors, box, success, warn, getPassthroughArgs } from "./utils.js";
 
 export async function handleReset(ref, options) {
+  const passthrough = getPassthroughArgs("reset");
   const git = getGit();
+  if (passthrough.length) {
+    try {
+      const result = await git.raw(["reset", ref || "HEAD", ...passthrough].filter(Boolean));
+      console.log(result);
+    } catch (err) {
+      console.log(`${box("Reset Failed", [err.message], { color: colors.red })}\n`);
+    }
+    return;
+  }
   try {
     const mode = options.hard ? "hard" : options.soft ? "soft" : "mixed";
     await git.reset([mode, ref || "HEAD"]);

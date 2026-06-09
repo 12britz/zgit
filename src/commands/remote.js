@@ -1,7 +1,17 @@
-import { getGit, colors, box, success } from "./utils.js";
+import { getGit, colors, box, success, getPassthroughArgs } from "./utils.js";
 
 export async function handleRemote(options) {
+  const passthrough = getPassthroughArgs("remote");
   const git = getGit();
+  if (passthrough.length) {
+    try {
+      const result = await git.raw(["remote", ...passthrough]);
+      console.log(result);
+    } catch (err) {
+      console.log(`${box("Remote Failed", [err.message], { color: colors.red })}\n`);
+    }
+    return;
+  }
   try {
     if (options.addName && options.addUrl) {
       await git.addRemote(options.addName, options.addUrl);
