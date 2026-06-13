@@ -29,6 +29,5 @@ export function handleHelp() {
   });
 
   console.log(box("commands", lines, { color: colors.cyan }));
-  console.log(`  ${info("Run")} ${colors.bold}zgit <command> --help${colors.reset} ${info("for details")}\n`);
+  console.log(`  ${info("Run")} ${colors.bold}zgit <command>${colors.reset} ${info("— all native git commands also work")}\n`);
 }
-

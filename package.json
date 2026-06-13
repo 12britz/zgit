@@ -1,7 +1,6 @@
 {
   "name": "@12britz/zgit",
-  "version": "1.0.0",
-
+  "version": "1.0.9",
   "description": "A beautifully colored git alternative",
   "type": "module",
   "main": "src/index.js",
@@ -32,8 +31,11 @@
     "figlet": "^1.11.0",
     "simple-git": "^3.36.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/12britz/zgit"
+    "url": "git+https://github.com/12britz/zgit.git"
   }
 }
