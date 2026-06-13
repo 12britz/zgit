@@ -24,6 +24,8 @@ A beautifully styled, Tokyo Night-themed CLI wrapper for Git that turns raw outp
 
 `zgit` wraps standard `git` commands and presents them in high-contrast Tokyo Night widgets. Zero configuration, zero context switching. Just your workflow, beautiful by default.
 
+![demo](demo.gif)
+
 ---
 
 ## ✨ Features
