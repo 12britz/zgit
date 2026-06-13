@@ -9,11 +9,11 @@ export function getGit() {
 const KNOWN_OPTS = {
   init: [[], ["path"]],
   clone: [[], ["url", "path"]],
-  status: [["short", "branch"], ["st"]],
+  status: [["branch"], ["st"]],
   log: [["count", "graph", "oneline"], []],
   diff: [["cached"], ["file"]],
   add: [[], ["paths"]],
-  commit: [["message", "all", "amend"], []],
+  commit: [["all", "amend"], []],
   branch: [["delete", "move", "list"], []],
   switch: [[], ["name"]],
   stash: [["pop", "list"], []],
@@ -21,7 +21,7 @@ const KNOWN_OPTS = {
   merge: [[], ["branch"]],
   pull: [[], ["remote"]],
   push: [[], ["remote"]],
-  remote: [["verbose", "addName", "addUrl"], []],
+  remote: [["addName", "addUrl"], []],
   tag: [["message"], ["name"]],
 };
 
@@ -39,45 +39,38 @@ export function getPassthroughArgs(cmdName, aliases = []) {
   const hasVariadic = posArgs.some(a => a.endsWith("..."));
 
   const after = process.argv.slice(idx + 1);
-  const passthrough = [];
+  let needsPassthrough = false;
   let posSeen = 0;
 
   for (let i = 0; i < after.length; i++) {
     const a = after[i];
     if (a === "--") {
-      passthrough.push(a);
       continue;
     }
     if (a.startsWith("--")) {
       const eqIdx = a.indexOf("=");
       const key = eqIdx !== -1 ? a.slice(2, eqIdx) : a.slice(2);
       if (!longSet.has(key)) {
-        passthrough.push(a);
-        if (eqIdx === -1 && i + 1 < after.length && !after[i + 1].startsWith("-")) {
-          passthrough.push(after[++i]);
-        }
-      } else if (eqIdx === -1 && i + 1 < after.length && !after[i + 1].startsWith("-")) {
+        needsPassthrough = true;
+        break;
+      }
+      if (eqIdx === -1 && i + 1 < after.length && !after[i + 1].startsWith("-")) {
         i++;
       }
     } else if (a.startsWith("-") && a.length === 2) {
-      const key = a.slice(1);
-      if (!longSet.has(key)) {
-        passthrough.push(a);
-        if (i + 1 < after.length && !after[i + 1].startsWith("-")) {
-          passthrough.push(after[++i]);
-        }
-      }
+      needsPassthrough = true;
+      break;
     } else {
-      // positional
       if (hasVariadic || posSeen < posCount) {
         posSeen++;
       } else {
-        passthrough.push(a);
+        needsPassthrough = true;
+        break;
       }
     }
   }
 
-  return passthrough;
+  return needsPassthrough ? after : [];
 }
 
 function hexToAnsi(hex, bg = false) {

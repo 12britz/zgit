@@ -5,10 +5,7 @@ export async function handleCommit(options) {
   const git = getGit();
   if (passthrough.length) {
     try {
-      const args = ["commit", ...passthrough];
-      if (options.message) args.push("-m", options.message);
-      if (options.all) args.push("-a");
-      const result = await git.raw(args);
+      const result = await git.raw(["commit", ...passthrough]);
       console.log(result);
     } catch (err) {
       console.log(`${box("Commit Failed", [err.message], { color: colors.red })}\n`);
