@@ -19,6 +19,7 @@ import { handleClone } from "./commands/clone.js";
 import { handleRemote } from "./commands/remote.js";
 import { handleTag } from "./commands/tag.js";
 import { handleHelp } from "./commands/help.js";
+import { handlePassthrough } from "./commands/passthrough.js";
 
 const program = new Command();
 
@@ -171,6 +172,13 @@ program
   .allowUnknownOption(true)
   .allowExcessArguments(true)
   .action((name, opts) => handleTag({ name, ...opts }));
+
+program.on("command:*", async (cmds) => {
+  const [cmd, ...args] = cmds;
+  if (cmd) {
+    await handlePassthrough(cmd, args);
+  }
+});
 
 if (process.argv.length <= 2) {
   console.log(showBanner());
