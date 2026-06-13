@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
 import { showBanner } from "./banner.js";
 import { box, colors } from "./commands/utils.js";
 import { handleStatus } from "./commands/status.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(readFileSync(resolve(__dirname, "../package.json"), "utf8"));
 import { handleLog } from "./commands/log.js";
 import { handleDiff } from "./commands/diff.js";
 import { handleAdd } from "./commands/add.js";
@@ -26,7 +32,7 @@ const program = new Command();
 program
   .name("zgit")
   .description("A beautifully colored git alternative with stunning box-style output")
-  .version("1.0.0");
+  .version(pkg.version);
 
 program
   .command("init")
